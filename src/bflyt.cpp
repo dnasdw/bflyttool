@@ -114,6 +114,8 @@ bool CBflyt::ExportText()
 			}
 			if (pTextBox->TextStrOffset != 0)
 			{
+				n32 nTextBoxWidth = static_cast<n32>(pTextBox->Size.X);
+				n32 nTextBoxHeight = static_cast<n32>(pTextBox->Size.Y);
 				Char16_t* pTextStr = reinterpret_cast<Char16_t*>(pBflyt + uOffset + pTextBox->TextStrOffset);
 				if (m_eEndianness == kEndianBig)
 				{
@@ -195,7 +197,7 @@ bool CBflyt::ExportText()
 				{
 					fu16printf(fp, L"\r\n\r\n");
 				}
-				fu16printf(fp, L"No.%d\r\n", nIndex++);
+				fu16printf(fp, L"No.%d %d,%d\r\n", nIndex++, nTextBoxWidth, nTextBoxHeight);
 				fu16printf(fp, L"--------------------------------------\r\n");
 				fu16printf(fp, L"%ls\r\n", sTxt.c_str());
 				fu16printf(fp, L"======================================\r\n");
@@ -343,7 +345,7 @@ bool CBflyt::ImportText()
 					sTxt = U16ToW(pTemp + 1);
 					delete[] pTemp;
 				}
-				wstring sNum = Format(L"No.%d\r\n", nIndex++);
+				wstring sNum = Format(L"No.%d", nIndex++);
 				uPos0 = sTxt.find(sNum, uPos0);
 				if (uPos0 == wstring::npos)
 				{
@@ -352,6 +354,35 @@ bool CBflyt::ImportText()
 					return 1;
 				}
 				uPos0 += sNum.size();
+				if (StartWith(sTxt, L" ", uPos0))
+				{
+					wstring::size_type uPos1 = sTxt.find(L"\r\n", uPos0);
+					if (uPos1 == wstring::npos)
+					{
+						fclose(fp);
+						delete[] pBflyt;
+						return 1;
+					}
+					wstring sTextBoxSize = Trim(sTxt.substr(uPos0, uPos1 - uPos0));
+					vector<wstring> vTextBoxSize = Split(sTextBoxSize, L",");
+					if (vTextBoxSize.size() != 2)
+					{
+						fclose(fp);
+						delete[] pBflyt;
+						return 1;
+					}
+					n32 nTextBoxWidth = SToN32(vTextBoxSize[0]);
+					n32 nTextBoxHeight = SToN32(vTextBoxSize[1]);
+					if (nTextBoxWidth != static_cast<n32>(pTextBox->Size.X))
+					{
+						pTextBox->Size.X = static_cast<f32>(nTextBoxWidth);
+					}
+					if (nTextBoxHeight != static_cast<n32>(pTextBox->Size.Y))
+					{
+						pTextBox->Size.Y = static_cast<f32>(nTextBoxHeight);
+					}
+					uPos0 = uPos1;
+				}
 				uPos0 = sTxt.find(L"======================================\r\n", uPos0);
 				if (uPos0 == wstring::npos)
 				{

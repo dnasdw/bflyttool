@@ -5,6 +5,7 @@ A tool for modify bflyt file.
 ## History
 
 - v1.0.0 @ 2017.08.25 - First release
+- v1.0.1 @ 2017.08.27 - Support change textBox size
 
 ## Platforms
 
