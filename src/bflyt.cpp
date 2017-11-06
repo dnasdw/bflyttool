@@ -354,7 +354,7 @@ bool CBflyt::ImportText()
 					return 1;
 				}
 				uPos0 += sNum.size();
-				if (StartWith(sTxt, L" ", uPos0))
+				if (StartWith(sTxt, L" ", static_cast<u32>(uPos0)))
 				{
 					wstring::size_type uPos1 = sTxt.find(L"\r\n", uPos0);
 					if (uPos1 == wstring::npos)
