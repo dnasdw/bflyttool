@@ -140,17 +140,23 @@ public:
 	void SetFileName(const UString& a_sFileName);
 	void SetTxtName(const UString& a_sTxtName);
 	void SetFakeCharsetName(const UString& a_sFakeCharset);
+	void SetForce(bool a_bForce);
 	void SetVerbose(bool a_bVerbose);
 	bool ExportText();
 	bool ImportText();
 	static bool IsBflytFile(const UString& a_sFileName);
 private:
+	bool initExt();
 	bool loadFakeCharset(bool a_bSwap);
+	static const char s_nUnused[8];
 	UString m_sFileName;
 	UString m_sTxtName;
 	UString m_sFakeCharsetName;
+	bool m_bForce;
 	bool m_bVerbose;
 	EEndianness m_eEndianness;
+	map<u32, U16String> m_mExt;
+	map<U16String, u32> m_mExtStr;
 	Char16_t m_uFakeCharset[0x10000];
 };
 

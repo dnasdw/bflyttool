@@ -8,6 +8,7 @@ CBflytTool::SOption CBflytTool::s_Option[] =
 	{ USTR("file"), USTR('f'), USTR("the target file") },
 	{ USTR("txt"), USTR('t'), USTR("the txt file for the target file") },
 	{ USTR("fake-charset"), 0, USTR("fake charset file for some game with the japanese encoding") },
+	{ USTR("force"), 0, USTR("force mode, RECOMMENDED") },
 	{ USTR("verbose"), USTR('v'), USTR("show the info") },
 	{ USTR("help"), USTR('h'), USTR("show this help") },
 	{ nullptr, 0, nullptr }
@@ -15,6 +16,7 @@ CBflytTool::SOption CBflytTool::s_Option[] =
 
 CBflytTool::CBflytTool()
 	: m_eAction(kActionNone)
+	, m_bForce(false)
 	, m_bVerbose(false)
 {
 }
@@ -118,6 +120,7 @@ int CBflytTool::Help()
 	UPrintf(USTR("usage: bflyttool [option...] [option]...\n"));
 	UPrintf(USTR("sample:\n"));
 	UPrintf(USTR("  bflyttool -evft title.bflyt title.l10n.txt\n"));
+	UPrintf(USTR("  bflyttool -evft title.bflyt title.l10n.txt --force\n"));
 	UPrintf(USTR("  bflyttool -ivft title.bflyt title_new.l10n.txt\n"));
 	UPrintf(USTR("  bflyttool -ivft title.bflyt title_new.l10n.txt --fake-charset fake-charset.bin\n"));
 	UPrintf(USTR("\n"));
@@ -225,6 +228,10 @@ CBflytTool::EParseOptionReturn CBflytTool::parseOptions(const UChar* a_pName, in
 		}
 		m_sFakeCharsetName = a_pArgv[++a_nIndex];
 	}
+	else if (UCscmp(a_pName, USTR("force")) == 0)
+	{
+		m_bForce = true;
+	}
 	else if (UCscmp(a_pName, USTR("verbose")) == 0)
 	{
 		m_bVerbose = true;
@@ -254,6 +261,7 @@ bool CBflytTool::exportText()
 	bflyt.SetFileName(m_sFileName);
 	bflyt.SetTxtName(m_sTxtName);
 	bflyt.SetFakeCharsetName(m_sFakeCharsetName);
+	bflyt.SetForce(m_bForce);
 	bflyt.SetVerbose(m_bVerbose);
 	return bflyt.ExportText();
 }
@@ -264,6 +272,7 @@ bool CBflytTool::importText()
 	bflyt.SetFileName(m_sFileName);
 	bflyt.SetTxtName(m_sTxtName);
 	bflyt.SetFakeCharsetName(m_sFakeCharsetName);
+	bflyt.SetForce(m_bForce);
 	bflyt.SetVerbose(m_bVerbose);
 	return bflyt.ImportText();
 }

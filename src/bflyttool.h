@@ -42,6 +42,7 @@ private:
 	UString m_sFileName;
 	UString m_sTxtName;
 	UString m_sFakeCharsetName;
+	bool m_bForce;
 	bool m_bVerbose;
 };
 

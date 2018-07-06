@@ -5,6 +5,7 @@ A tool for modify bflyt file.
 ## History
 
 - v1.1.0 @ 2018.01.04 - A new beginning
+- v1.1.1 @ 2018.07.07 - Add force mode
 
 ### v1.0
 
