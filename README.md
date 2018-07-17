@@ -6,6 +6,7 @@ A tool for modify bflyt file.
 
 - v1.1.0 @ 2018.01.04 - A new beginning
 - v1.1.1 @ 2018.07.07 - Add force mode
+- v1.1.2 @ 2018.07.17 - Check text string offset
 
 ### v1.0
 

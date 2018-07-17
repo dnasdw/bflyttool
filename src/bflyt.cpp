@@ -124,7 +124,7 @@ bool CBflyt::ExportText()
 						pTextBox->PerCharacterTransformOffset = SDW_CONVERT_ENDIAN32(pTextBox->PerCharacterTransformOffset);
 					}
 				}
-				if (pTextBox->TextStrOffset != 0 && uOffset + pTextBox->TextStrOffset < uBflytSize)
+				if (pTextBox->TextStrOffset != 0 && pTextBox->TextStrOffset != pTextBox->BlockHeader.Size && uOffset + pTextBox->TextStrOffset < uBflytSize)
 				{
 					n32 nTextBoxWidth = static_cast<n32>(pTextBox->Size.X);
 					n32 nTextBoxHeight = static_cast<n32>(pTextBox->Size.Y);
@@ -276,7 +276,7 @@ bool CBflyt::ExportText()
 						pTextBox->PerCharacterTransformOffset = SDW_CONVERT_ENDIAN32(pTextBox->PerCharacterTransformOffset);
 					}
 				}
-				if (pTextBox->TextStrOffset != 0)
+				if (pTextBox->TextStrOffset != 0 && pTextBox->TextStrOffset != pTextBox->BlockHeader.Size)
 				{
 					n32 nTextBoxWidth = static_cast<n32>(pTextBox->Size.X);
 					n32 nTextBoxHeight = static_cast<n32>(pTextBox->Size.Y);
@@ -487,7 +487,7 @@ bool CBflyt::ImportText()
 						pTextBox->PerCharacterTransformOffset = SDW_CONVERT_ENDIAN32(pTextBox->PerCharacterTransformOffset);
 					}
 				}
-				if (pTextBox->TextStrOffset != 0 && uOffset + pTextBox->TextStrOffset < uBflytSize)
+				if (pTextBox->TextStrOffset != 0 && pTextBox->TextStrOffset != pTextBox->BlockHeader.Size && uOffset + pTextBox->TextStrOffset < uBflytSize)
 				{
 					Char16_t* pTextStr = reinterpret_cast<Char16_t*>(pBflyt + uOffset + pTextBox->TextStrOffset);
 					if (uOffset + pTextBox->TextStrOffset + sizeof(s_nUnused) > uBflytSize || memcmp(pTextStr, s_nUnused, sizeof(s_nUnused)) != 0)
@@ -746,7 +746,7 @@ bool CBflyt::ImportText()
 						pTextBox->PerCharacterTransformOffset = SDW_CONVERT_ENDIAN32(pTextBox->PerCharacterTransformOffset);
 					}
 				}
-				if (pTextBox->TextStrOffset != 0)
+				if (pTextBox->TextStrOffset != 0 && pTextBox->TextStrOffset != pTextBox->BlockHeader.Size)
 				{
 					Char16_t* pTextStr = reinterpret_cast<Char16_t*>(pBflyt + uOffset + pTextBox->TextStrOffset);
 					if (memcmp(pTextStr, s_nUnused, sizeof(s_nUnused)) != 0)
